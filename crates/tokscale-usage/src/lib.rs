@@ -11,6 +11,7 @@ mod minimax;
 mod minimax_tokenplan;
 mod sakana;
 mod warp;
+pub mod warp_cache;
 mod zai;
 
 use anyhow::Result;
@@ -278,7 +279,7 @@ impl UsageOutput {
 // ── Cache ──
 
 fn cache_path() -> Option<std::path::PathBuf> {
-    let dir = crate::paths::get_cache_dir();
+    let dir = tokscale_core::paths::get_cache_dir();
     if std::fs::create_dir_all(&dir).is_err() {
         return None;
     }

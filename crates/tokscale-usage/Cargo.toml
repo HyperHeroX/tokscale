@@ -1,0 +1,36 @@
+[package]
+name = "tokscale-usage"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Subscription usage and quota fetching for tokscale - provider quota polling shared by CLI, TUI, and desktop"
+
+[lib]
+crate-type = ["rlib"]
+
+[dependencies]
+tokscale-core = { workspace = true }
+
+anyhow = { workspace = true }
+chrono = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+fs2 = { workspace = true }
+dirs = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }
+
+# NOTE: `colored` and `uuid` are pulled in by the per-provider status renderers
+# (e.g. `codex::run_codex_status`) that were historically co-located with the
+# fetch logic. They remain here until a follow-up splits data vs. CLI display.
+# Desktop/widget callers only invoke the pure-data APIs (`fetch_all_*`,
+# `load_cache`) and never hit these renderers.
+colored = "2"
+uuid = { version = "1.0", features = ["v4"] }
+
+[dev-dependencies]
+tempfile = "3"
+serial_test = "3"

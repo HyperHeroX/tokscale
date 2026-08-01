@@ -1,0 +1,186 @@
+:root {
+  --bg: #16181e;
+  --fg: #e8eaf0;
+  --muted: #9aa0ad;
+  --accent: #0073ff;
+  --accent-2: #3b82f6;
+  --border: rgba(255, 255, 255, 0.10);
+  --danger: #ff6b6b;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 460px;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 16px;            /* minimum readable size (需求②) */
+  color: var(--fg);
+  background: var(--bg);      /* opaque: transparent windows break always-on-top on Windows */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.widget {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Title bar — mousedown starts a native drag (需求①) ---------------------*/
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: grab;
+  border-bottom: 1px solid var(--border);
+}
+.titlebar:active { cursor: grabbing; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 18px; }
+.logo { color: var(--accent); }
+.view-name {
+  color: var(--accent-2);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.today { margin-left: auto; color: var(--muted); font-size: 16px; }
+.pin-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  opacity: 0.6;
+  transition: opacity 0.15s, background 0.15s;
+}
+.pin-btn:hover { opacity: 1; background: rgba(255, 255, 255, 0.08); }
+.pin-btn.active { opacity: 1; }
+
+/* View body ---------------------------------------------------------------*/
+.view-body { padding: 10px 14px; min-height: 60px; }
+.section-label {
+  color: var(--muted);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 6px 0 8px;
+}
+
+/* Supplier rows -----------------------------------------------------------*/
+.suppliers { display: flex; flex-direction: column; }
+.sup-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.sup-row:last-child { border-bottom: none; }
+.sup-name { font-weight: 600; min-width: 96px; font-size: 16px; }
+.sup-quota { flex: 1; color: var(--muted); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sup-meta { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sup-meta .tok { color: var(--muted); margin-right: 7px; font-size: 16px; }
+.sup-meta .cost { font-weight: 600; font-size: 16px; }
+.sup-total {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 17px;
+  text-align: right;
+}
+
+/* Generic list rows (models/monthly/hourly) -------------------------------*/
+.list { display: flex; flex-direction: column; }
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 16px;
+}
+.list-row:last-child { border-bottom: none; }
+.list-row .k { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
+.list-row .v { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.list-row .v .tok { color: var(--muted); margin-right: 7px; }
+
+/* Stats grid --------------------------------------------------------------*/
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+.stat .k { color: var(--muted); font-size: 16px; text-transform: uppercase; letter-spacing: 0.4px; }
+.stat .v { font-size: 22px; font-weight: 600; margin-top: 3px; }
+
+/* Contribution heatmap (dashboard view) -----------------------------------*/
+.heatmap {
+  display: grid;
+  grid-template-rows: repeat(7, 15px);
+  grid-auto-flow: column;
+  grid-auto-columns: 15px;
+  gap: 3px;
+  margin: 4px 0 10px;
+}
+.hm-cell { width: 15px; height: 15px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); }
+.hm-cell.i1 { background: #0e4429; }
+.hm-cell.i2 { background: #006d32; }
+.hm-cell.i3 { background: #26a641; }
+.hm-cell.i4 { background: #39d353; }
+
+.empty { color: var(--muted); padding: 16px 4px; font-size: 16px; line-height: 1.5; }
+.empty.error { color: var(--danger); }
+.empty code { background: rgba(255, 255, 255, 0.08); padding: 1px 5px; border-radius: 3px; }
+
+.hint { padding: 6px 14px 10px; color: var(--muted); font-size: 16px; text-align: center; opacity: 0.7; }
+
+/* Context menu ------------------------------------------------------------*/
+.context-menu {
+  position: fixed;
+  z-index: 50;
+  min-width: 220px;
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
+  background: rgba(28, 30, 38, 0.98);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  padding: 6px;
+  font-size: 16px;
+}
+.context-menu .group-label {
+  color: var(--muted);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 6px 10px 3px;
+}
+.context-menu .item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.context-menu .item:hover { background: rgba(255, 255, 255, 0.09); }
+.context-menu .item.active { color: var(--accent-2); }
+.context-menu .item .ico { width: 16px; text-align: center; opacity: 0.8; }
+.context-menu .sep { height: 1px; background: var(--border); margin: 5px 3px; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 4px; }

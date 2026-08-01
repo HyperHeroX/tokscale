@@ -44,7 +44,7 @@ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 ///   1. env var `SAKANA_SESSION_COOKIE`
 ///   2. file `<config dir>/sakana-session` (raw cookie string, trimmed)
 ///
-/// The config dir is resolved via the canonical `crate::paths::get_config_dir()`
+/// The config dir is resolved via the canonical `tokscale_core::paths::get_config_dir()`
 /// so `TOKSCALE_CONFIG_DIR` / XDG overrides are honored (matching every other
 /// provider, e.g. `codex.rs`), instead of hardcoding `~/.config/tokscale`.
 ///
@@ -57,7 +57,7 @@ fn session_cookie() -> Option<String> {
         }
     }
 
-    let path = crate::paths::get_config_dir().join("sakana-session");
+    let path = tokscale_core::paths::get_config_dir().join("sakana-session");
     if let Ok(content) = std::fs::read_to_string(&path) {
         let trimmed = content.trim();
         if !trimmed.is_empty() {

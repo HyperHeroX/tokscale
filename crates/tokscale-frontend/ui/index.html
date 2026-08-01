@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokscale Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1><span class="logo">◆</span> Tokscale Dashboard</h1>
+    <nav class="views" id="views">
+      <button class="view-btn active" data-view="overview">Overview</button>
+      <button class="view-btn" data-view="usage">Usage</button>
+      <button class="view-btn" data-view="suppliers">Suppliers</button>
+      <button class="view-btn" data-view="models">Models</button>
+      <button class="view-btn" data-view="monthly">Monthly</button>
+      <button class="view-btn" data-view="hourly">Hourly</button>
+      <button class="view-btn" data-view="3d">3D</button>
+      <button class="view-btn" data-view="wrapped">Wrapped</button>
+    </nav>
+    <button id="refreshBtn">Refresh</button>
+  </header>
+  <main id="content">
+    <div class="empty">Loading…</div>
+  </main>
+  <div class="context-menu" id="contextMenu" hidden></div>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -229,7 +229,7 @@ enum StoreRepairPolicy {
 }
 
 fn codex_store_path() -> PathBuf {
-    crate::paths::get_config_dir().join("codex-credentials.json")
+    tokscale_core::paths::get_config_dir().join("codex-credentials.json")
 }
 
 #[cfg(test)]

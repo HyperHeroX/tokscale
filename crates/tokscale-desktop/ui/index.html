@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokscale</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="widget" id="widget">
+    <!-- Title bar = drag handle (mousedown invokes Rust start_drag) + view + today + pin (需求①) -->
+    <header class="titlebar" id="titlebar">
+      <div class="brand">
+        <span class="logo">◆</span>
+        <span class="title">Tokscale</span>
+      </div>
+      <div class="view-name" id="viewName">Usage</div>
+      <div class="today" id="today">—</div>
+      <button class="pin-btn active" id="pinBtn" title="On top — click to release" aria-label="Toggle always on top">📍</button>
+    </header>
+
+    <!-- Current view body; views swap here (需求③ default = suppliers grouped by quota) -->
+    <main class="view-body" id="viewBody">
+      <div class="empty">Loading…</div>
+    </main>
+
+    <footer class="hint">right-click for menu · drag titlebar to move</footer>
+  </div>
+
+  <!-- Right-click context menu (需求④): view switching + full surfaces + CLI -->
+  <div class="context-menu" id="contextMenu" hidden></div>
+
+  <!-- inline debug: confirms the webview loaded the HTML at all -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var b = document.getElementById("viewBody");
+      if (b) b.innerHTML = '<div class="empty">HTML loaded · starting app…</div>';
+    });
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

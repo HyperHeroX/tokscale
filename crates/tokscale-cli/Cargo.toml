@@ -19,6 +19,7 @@ apple-fm = []
 
 [dependencies]
 tokscale-core = { workspace = true }
+tokscale-usage = { workspace = true }
 
 clap = { workspace = true }
 ratatui = { workspace = true }

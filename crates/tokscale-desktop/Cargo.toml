@@ -1,0 +1,33 @@
+[package]
+name = "tokscale-desktop"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Tokscale floating desktop widget - a frameless, pinnable AI usage overlay"
+
+[lib]
+name = "tokscale_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tokscale-core = { workspace = true }
+tokscale-usage = { workspace = true }
+
+# Pinned to 2.11: tauri 2.10.x pulls tauri-runtime-wry 2.10.x whose window-request
+# closure is not `Sync`, which conflicts with the `Sync` bound wry >=0.53 requires.
+# tauri-runtime-wry 2.11.x (shipped with tauri 2.11) fixes that. Keep `>=2.11`.
+tauri = { version = "2.11", features = ["macos-private-api"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+chrono = { workspace = true }
+
+# Direct Win32 SetWindowPos for reliable always-on-top on transparent
+# frameless windows (Tauri's set_always_on_top reports ok but does not stick).
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }

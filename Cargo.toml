@@ -2,7 +2,10 @@
 resolver = "2"
 members = [
     "crates/tokscale-core",
+    "crates/tokscale-usage",
     "crates/tokscale-cli",
+    "crates/tokscale-desktop",
+    "crates/tokscale-frontend",
 ]
 
 [workspace.package]
@@ -15,6 +18,7 @@ repository = "https://github.com/junhoyeo/tokscale"
 [workspace.dependencies]
 # Internal crates
 tokscale-core = { path = "crates/tokscale-core" }
+tokscale-usage = { path = "crates/tokscale-usage" }
 
 # Parallelism
 rayon = "1.10"

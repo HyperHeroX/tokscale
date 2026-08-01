@@ -2,10 +2,10 @@ use super::{UsageMetric, UsageOutput};
 use anyhow::Result;
 
 pub fn has_credentials() -> bool {
-    crate::warp::load_usage_cache().is_some()
+    crate::warp_cache::load_usage_cache().is_some()
 }
 
-fn build_metrics(usage: &crate::warp::WarpAggregateUsage) -> Vec<UsageMetric> {
+fn build_metrics(usage: &crate::warp_cache::WarpAggregateUsage) -> Vec<UsageMetric> {
     let mut metrics = Vec::new();
 
     if let Some(used) = usage.requests_used {
@@ -49,7 +49,7 @@ fn build_metrics(usage: &crate::warp::WarpAggregateUsage) -> Vec<UsageMetric> {
 }
 
 pub fn fetch() -> Result<UsageOutput> {
-    let cache = crate::warp::load_usage_cache()
+    let cache = crate::warp_cache::load_usage_cache()
         .ok_or_else(|| anyhow::anyhow!("Warp aggregate usage cache not found"))?;
     let metrics = build_metrics(&cache.usage);
 
@@ -68,7 +68,7 @@ pub fn fetch() -> Result<UsageOutput> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::warp::WarpAggregateUsage;
+    use crate::warp_cache::WarpAggregateUsage;
 
     #[test]
     fn spend_metric_reads_full_not_exhausted() {

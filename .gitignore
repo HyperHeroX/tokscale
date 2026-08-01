@@ -14,6 +14,8 @@ benchmarks/results/*
 benchmarks/synthetic-data/
 
 target/
+# Tauri generated schemas (build artifacts)
+crates/*/gen/
 *.node
 __pycache__/
 
