@@ -66,16 +66,21 @@ async fn fetch_sub(client: &reqwest::Client, key: &str) -> Result<SubResp> {
     Ok(resp.json().await?)
 }
 
-pub fn has_credentials() -> bool {
+fn read_api_key() -> Result<String> {
     std::env::var("ZAI_API_KEY")
         .or_else(|_| std::env::var("GLM_API_KEY"))
-        .is_ok()
+        .or_else(|_| std::env::var("ZHIPU_API_KEY"))
+        .map_err(|_| anyhow::anyhow!(
+            "No ZAI_API_KEY, GLM_API_KEY, or ZHIPU_API_KEY set."
+        ))
+}
+
+pub fn has_credentials() -> bool {
+    read_api_key().is_ok()
 }
 
 pub fn fetch() -> Result<UsageOutput> {
-    let api_key = std::env::var("ZAI_API_KEY")
-        .or_else(|_| std::env::var("GLM_API_KEY"))
-        .map_err(|_| anyhow::anyhow!("No ZAI_API_KEY or GLM_API_KEY set."))?;
+    let api_key = read_api_key()?;
 
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
