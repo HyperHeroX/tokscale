@@ -86,17 +86,23 @@ body {
 .suppliers { display: flex; flex-direction: column; }
 .sup-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 5px;
   padding: 7px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 .sup-row:last-child { border-bottom: none; }
-.sup-name { font-weight: 600; min-width: 96px; font-size: 16px; }
-.sup-quota { flex: 1; color: var(--muted); font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sup-line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.sup-name { font-weight: 600; font-size: 16px; }
 .sup-meta { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .sup-meta .tok { color: var(--muted); margin-right: 7px; font-size: 16px; }
 .sup-meta .cost { font-weight: 600; font-size: 16px; }
+.sup-bars { display: flex; flex-direction: column; gap: 4px; }
+.sup-bar-row { display: flex; align-items: center; gap: 8px; }
+.sup-bar-label { color: var(--muted); font-size: 14px; min-width: 40px; }
+.sup-bar { flex: 1; height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 3px; overflow: hidden; }
+.sup-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); border-radius: 3px; }
+.sup-bar-pct { font-variant-numeric: tabular-nums; font-size: 14px; min-width: 38px; text-align: right; }
 .sup-total {
   margin-top: 10px;
   padding-top: 9px;

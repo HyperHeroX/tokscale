@@ -93,13 +93,6 @@ function shortLabel(label) {
   if (l.includes("weekly")) return "weekly";
   return label || "";
 }
-// 需求②: show USED percent (not remaining).
-function formatQuota(metrics) {
-  return pickMetrics(metrics)
-    .map((m) => shortLabel(m.label) + "/" + Math.round(m.used_percent || 0) + "%")
-    .join("  ");
-}
-
 // ── Views ─────────────────────────────────────────────────────────────────
 const VIEW_LABELS = {
   usage: "Usage", models: "Models", monthly: "Monthly", hourly: "Hourly",
@@ -146,7 +139,7 @@ async function loadUsageView() {
     if (client) seen.add(client);
     return {
       name: q.display_name || q.provider,
-      quota: formatQuota(q.metrics),
+      metrics: pickMetrics(q.metrics),
       token: client ? tokenByClient.get(client) || 0 : null,
       cost: client ? costByClient.get(client) || 0 : null,
     };
@@ -157,7 +150,7 @@ async function loadUsageView() {
       const tok = tokenByClient.get(client) || 0;
       const cost = costByClient.get(client) || 0;
       if (!tok && !cost) continue;
-      rows.push({ name: CLIENT_LABEL[client] || client, quota: "—", token: tok, cost });
+      rows.push({ name: CLIENT_LABEL[client] || client, metrics: [], token: tok, cost });
     }
   }
 
@@ -176,14 +169,27 @@ async function loadUsageView() {
 }
 
 function supplierRow(r) {
+  const bars = (r.metrics || []).map(barRow).join("");
   return (
     '<div class="sup-row">' +
-      '<span class="sup-name">' + esc(r.name) + "</span>" +
-      '<span class="sup-quota">' + esc(r.quota || "—") + "</span>" +
-      '<span class="sup-meta">' +
-        (r.token != null ? '<span class="tok">' + fmtTokens(r.token) + "</span>" : "") +
-        '<span class="cost">' + fmtCost(r.cost || 0) + "</span>" +
-      "</span>" +
+      '<div class="sup-line">' +
+        '<span class="sup-name">' + esc(r.name) + "</span>" +
+        '<span class="sup-meta">' +
+          (r.token != null ? '<span class="tok">' + fmtTokens(r.token) + "</span>" : "") +
+          '<span class="cost">' + fmtCost(r.cost || 0) + "</span>" +
+        "</span>" +
+      "</div>" +
+      (bars ? '<div class="sup-bars">' + bars + "</div>" : "") +
+    "</div>"
+  );
+}
+function barRow(m) {
+  const used = Math.max(0, Math.min(100, Math.round(m.used_percent || 0)));
+  return (
+    '<div class="sup-bar-row">' +
+      '<span class="sup-bar-label">' + esc(shortLabel(m.label)) + "</span>" +
+      '<span class="sup-bar"><span class="sup-bar-fill" style="width:' + used + '%"></span></span>' +
+      '<span class="sup-bar-pct">' + used + "%</span>" +
     "</div>"
   );
 }
