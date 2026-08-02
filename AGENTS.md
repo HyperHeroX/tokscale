@@ -139,6 +139,15 @@ rg -nF 'GREATEST(${submittedDevices.totalActiveTimeMs}' "$R"
 
 Default to `-F` when the pattern contains any of `$ { } ( ) [ ] | * + ? . \` and you mean them literally — which, in this codebase, is most searches for drizzle `sql` template fragments or Rust macro bodies.
 
+## Desktop & Frontend Apps
+
+Tokscale ships two separate Tauri apps with distinct roles — they are **not** the same window:
+
+- **`tokscale-desktop`** — the floating main window: a frameless, always-on-top overlay widget (the small window users keep on screen).
+- **`tokscale-frontend`** — the Dashboard: a separate, full local dashboard app (Overview / Usage / Models / Monthly / … views), launched from the desktop widget's right-click menu ("Open frontend app").
+
+**UI edits are not hot-reloaded.** Each app's `ui/*.{html,js,css}` is a Tauri-bundled resource (`frontendDist: "./ui"` in `tauri.conf.json`, compiled in by `tauri_build::build()`). After editing any of them you must rebuild the affected app (`cargo build -p tokscale-frontend` / `-p tokscale-desktop`) before the change is visible — a passing `cargo check` does not pick up UI edits.
+
 ## Release & Deployment
 
 ### Overview
