@@ -139,7 +139,39 @@ async function loadOverview() {
     '<div class="grid2">' +
       section("Top suppliers · tokens / cost", breakdownList(suppliers, supplierTok)) +
       section("Top models · tokens / cost", breakdownList(models, modelTok)) +
-    "</div>";
+    "</div>" +
+    section("Subscription quotas", '<div id="overviewQuotas" class="empty">Loading quotas…</div>');
+  loadOverviewQuotas();
+}
+
+// Non-blocking subscription quota cards appended to the Overview. Fetches hit
+// external provider APIs (15s timeout + 5m cache), so they never gate the
+// locally-computed Overview body above.
+async function loadOverviewQuotas() {
+  const host = document.getElementById("overviewQuotas");
+  if (!host) return;
+  const quotas = await invoke("get_subscription_usage").catch(() => null);
+  if (!host) return;
+  if (!quotas) { host.classList.add("empty"); host.textContent = "Usage unavailable."; return; }
+  host.classList.remove("empty");
+  host.innerHTML = quotas.length ? quotaCards(quotas) : "No authenticated providers.";
+}
+function quotaCards(quotas) {
+  return '<div class="quota-grid">' + quotas.map((q) => {
+    const planTag = q.plan ? ' · <span class="qplan">' + esc(q.plan) + "</span>" : "";
+    const bars = (q.metrics || []).map((m) => {
+      const used = Math.max(0, Math.min(100, Math.round(m.used_percent || 0)));
+      const rem = m.remaining_label || (Math.round(m.remaining_percent || 0) + "% left");
+      const reset = m.resets_at ? " · resets " + formatReset(m.resets_at) : "";
+      return '<div class="qmetric">' +
+        '<div class="qm-top"><span class="qm-label">' + esc(shortLabel(m.label)) + "</span>" +
+        '<span class="qm-pct">' + used + "% used</span></div>" +
+        '<div class="qm-bar"><div class="qm-fill" style="width:' + used + '%"></div></div>' +
+        '<div class="qm-sub">' + esc(rem) + reset + "</div></div>";
+    }).join("");
+    return '<div class="quota-card"><div class="qhead">' + esc(q.provider) + planTag + "</div>" +
+      (bars || '<div class="qm-sub">No quota data</div>') + "</div>";
+  }).join("") + "</div>";
 }
 
 function stats(s) {
